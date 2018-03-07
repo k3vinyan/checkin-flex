@@ -1,0 +1,77 @@
+{% extends 'home/layout.html' %}
+
+{% block content %}
+
+
+<div class="container">
+  <table class="highlight">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Route</th>
+        <th class="center-align">Option</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if DP.drivers %}
+        {% for driver in DP.drivers %}
+          <tr class="row">
+            <td>{{ driver.first_name }}</td>
+            <td>{{ driver.last_name }}</td>
+            <td>
+              <div class="input-field col s12">
+                  {% csrf_token %}
+
+                {% if driver.isAssigned == True %}
+                  <select name={{driver.id}} id="routeSelector">
+                    <option value={{driver.route}} selected>{{driver.route.route}}</option>
+                    {% if DP.routes %}
+                      {% for route in DP.routes %}
+                        <option value="{{route.id}}">{{route.route}}</option>
+                      {% endfor %}
+                    {% endif %}
+                      <option value="None">None</option>
+                  </select>
+                {% endif %}
+
+                {% if driver.isAssigned == False %}
+                  <select name={{driver.id}} id="routeSelector" required>
+                   <option value="" disabled selected>Choose your option</option>
+                    {% if DP.routes %}
+                      {% for route in DP.routes %}
+                        <option value="{{route.id}}">{{route.route}}</option>
+                      {% endfor %}
+                    {% endif %}
+                      <option value="None">None</option>
+                  </select>
+                  <label>Routes Select</label>
+                {% endif %}
+
+              </div>
+
+            </td>
+
+            {% if driver.isAssigned == True %}
+              <td class="center-align">
+                <a class="waves-effect waves-light btn changeRouteBtn" data-id={{driver.id}}>Change Route</a>
+              </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+
+
+
+
+
+</div>
+<div class="container">
+</div>
+
+{% load static %}
+<script type="text/javascript" src="{% static 'javascript/assignRoutes.js' %}"></script>
+{% endblock %}
