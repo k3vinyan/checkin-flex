@@ -5,7 +5,8 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    @register.filter
-    def get_item(dictionary, key):
-        return dictionary.get(key)
-    return render(request, 'checkout/index.html')
+    if request.method == 'GET':
+        if sessionHelper.isAuthSession():
+            return render(request, 'checkout/index.html')
+        else:
+            return render(request, 'home/login.html')
