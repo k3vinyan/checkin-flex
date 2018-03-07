@@ -1,0 +1,63 @@
+{% extends 'home/layout.html' %}
+
+{% block content %}
+  <h1>ADD DRIVERS</h1>
+  <form action="/users/operations/add_drivers" method="POST" id="add-driver-form">
+    {% csrf_token %}
+    <textarea name='drivers'>
+    </textarea>
+    <input type="submit" />
+  </form>
+
+{% if blocks %}
+  {% for block in blocks %}
+  <div class="col s6">
+    <ul class="collapsible popout" data-collapsible="accordion">
+      <li>
+        <div class="collapsible-header">
+          <table class='centered'>
+            <thead>
+              <tr>
+                <th>Block</th>
+                <th>Shift Length</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+              <tr>
+                <td>{{block.startTime}} - {{block.endTime}}</td>
+                <td>{{block.shiftLength}}</td>
+                {% for key, value in total.items %}
+                  {% if key == block.startTime %}
+                    <td>{{value}}</td>
+                  {% endif %}
+                {% endfor %}
+              </tr>
+          </table>
+        </div>
+        <div class="collapsible-body">
+          <table class="striped">
+            <thead>
+              <th>Name</th>
+              <th>DP ID</th>
+              <th>Route</th>
+            </thead>
+            {% for driver in drivers %}
+              {% if driver.startTime == block.startTime %}
+                <tr>
+                  <td>{{driver.first_name}} {{driver.last_name}}</td>
+                  <td>{{driver.DPID}}</td>
+                  <td>{{driver.route.route}}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  {% endfor %}
+{% endif %}
+  {% load static %}
+  <script type="text/javascript" src="{% static 'operations/drivers.js' %}"></script>
+{% endblock %}
