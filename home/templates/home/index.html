@@ -1,1 +1,85 @@
-<h1>This is the home page</h1>
+{% extends 'home/layout.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+
+    <!-- Route Card -->
+    <div class="col s6">
+      <div class="card">
+        <div class="card-content white-text center-align">
+          <span class="card-title">Route on Site</span>
+          {% if unassignRoutes %}
+            <h1>{{ totalUnassignRoutes }}</h1>
+          {% else %}
+          <h1 class="white-text">0</h1>
+          {% endif %}
+        </div>
+
+        <div class="card-tabs">
+          <ul class="tabs tabs-fixed-width">
+            {% if unassignClusters %}
+              {% for cluster in unassignClusters %}
+                {% if cluster == "" %}
+                  <li class="tab"><a href='#noRoute'>No Route</a></li>
+                {% else %}
+                  <li class="tab"><a href=#{{cluster}}>{{cluster}}</a></li>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </ul>
+        </div>
+
+        <div class="card-content grey lighten-4">
+          {% if unassignClusters %}
+            {% for key,value in unassignClusters.items %}
+              {% if key == "" %}
+                <div id='noRoute'>{{value.count}} Route(s)</div>
+              {% else %}
+                <div id={{key}}>{{value.count}} Route(s)</div>
+              {% endif %}
+            {% endfor %}
+            {% else %}
+              <div class="center-align">Currently no route on site</div>
+          {% endif %}
+        </div>
+      </div>
+  </div>
+
+    <!-- Driver Card -->
+    <div class="col s6">
+      <div class="card">
+        <div class="card-content white-text center-align">
+          <span class="card-title">Driver Accepted</span>
+          {% if totalNotArrivedDrivers %}
+            <h1>{{ totalUnassignDrivers }}</h1>
+          {% else %}
+              <h1  class="white-text">0</h1>
+          {% endif %}
+        </div>
+
+        <div class="card-tabs">
+          <ul class="tabs tabs-fixed-width">
+            <li class="tab"><a href='#notarrived'>Not Arrived</a></li>
+            <li class="tab"><a href='#arrived'>Arrived</a></li>
+            <li class="tab"><a href='#scanning'>Scanning</a></li>
+          </ul>
+        </div>
+
+        <div class="card-content grey lighten-4 center-align">
+          <div id='notarrived'>{{totalNotArrivedDrivers}} DP have yet to arrived</div>
+          <div id='arrived'>{{totalArrivedDrivers}} DP are waiting for a route</div>
+          <div id='scanning'>{{totalAssignDrivers}} DP are scanning packages</div>
+        </div>
+      </div>
+
+
+  </div>
+</div>
+
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'operations/home.css' %}" />
+<script type="text/javascript" src="{% static 'operations/home.js' %}"></script>
+
+{% endblock %}
