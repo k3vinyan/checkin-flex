@@ -1,0 +1,54 @@
+{% extends 'home/layout.html' %}
+
+  {% block content %}
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Route</th>
+            <th>PackageScan/Total</th>
+            <th>Routing Tools</th>
+            <th>Update</th>
+            <th>Check Out</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if drivers %}
+          {% for driver in drivers %}
+            <tr id="tr-id-{{driver.id}}" class="unchecked">
+              <td>{{ driver.first_name }}</td>
+              <td>{{ driver.last_name }}</td>
+              <td>{{ driver.route.route }}</td>
+              <td class="center-align">{{ driver.packageScan }} / {{ driver.route.tbaCount }}</td>
+              <td>
+                todo
+              </td>
+              <td>
+                <form action="getDPScan">
+                  {% csrf_token %}
+                  <input  type="hidden" value={{driver.id}} name="driverId" />
+                  <button type="submit" class="waves-effect waves-light btn">UPDATE</button>
+                </form>
+              </td>
+              <td>
+                <form action="#" method="POST" id="form-checkout">
+                  {% csrf_token %}
+                  <input type="hidden" name="firstName" value={{driver.first_name}} />
+                  <input type="hidden" name="lastname" value={{driver.last_name}} />
+                  <input type="hidden" name="driver_id" value={{driver.id}} />
+                  <input type="checkbox" id={{driver.id}} class="checkout"/>
+                  <label for={{driver.id}} >CHECK OUT</label>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  {% load static %}
+  <script type="text/javascript" src="{% static 'javascript/checkout.js' %}"></script>
+  {% endblock %}
