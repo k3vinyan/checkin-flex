@@ -5,4 +5,4 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render('drivers/index.html')
+    return render(request, 'drivers/index.html')
