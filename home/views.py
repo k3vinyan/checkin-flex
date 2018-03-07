@@ -20,7 +20,8 @@ def index(request):
         password = request.POST.get('password')
         s = sessionHelper.getAmazonSession(email, password)
 
+        #something is wrong
         if sessionHelper.isAuthSession():
             return redirect('/')
         else:
-            return render(request, 'login/index.html', {'error': 'email or password is incorrect'})
+            return render(request, 'home/index.html', {'error': 'email or password is incorrect'})
