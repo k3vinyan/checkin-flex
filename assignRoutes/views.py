@@ -5,4 +5,4 @@ from django.shortcuts import render
 
 # Create your views here.
 def index(request):
-    return render('assignRoutes/index.html')
+    return render(request, 'assignRoutes/index.html')
