@@ -30,6 +30,10 @@ ALLOWED_HOSTS = ['localhost', '.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'drivers',
+    'checkin',
+    'assignRoutes',
+    'checkout',
     'routes',
     'home',
     'django.contrib.admin',
