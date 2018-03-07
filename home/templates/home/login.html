@@ -1,0 +1,43 @@
+{% extends 'home/layout.html' %}
+
+{% block content %}
+
+<div class="container">
+  <hgroup>
+    <h1>AMAZON FLEX HUB</h1>
+    <h5>By Makeven Yan</h5>
+  </hgroup>
+
+  <form action="" id="login" method="POST" id="login-form">
+    {% csrf_token %}
+    <div class="group">
+      <label>Email</label>
+      <input type="text" name="email" placeholder="email"/>
+    </div>
+    <div class="group">
+      <label>Password</label>
+      <input type="password" name="password" placeholder="password" />
+    </div>
+    <button type="submit" class="button buttonBlue" name="login-form">Submit
+      <div class="ripples buttonRipples"><span class="ripplesCircle"></span>
+      </div>
+    </button>
+
+    <!-- display error if error exist -->
+    {% if error %}
+      <p class="error panel-heading center-align"><i class="material-icons">error</i>
+        {{ error }}
+      </p>
+    {% endif %}
+
+  </form>
+
+
+</div>
+
+<footer><a href="http://www.polymer-project.org/" target="_blank"><img src="https://www.polymer-project.org/images/logos/p-logo.svg"></a>
+  <p>You Gotta Love <a href="http://www.polymer-project.org/" target="_blank">Google</a></p>
+</footer>
+
+
+{% endblock %}
