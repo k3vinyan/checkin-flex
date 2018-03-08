@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from django.http import HttpResponse
 from urllib2 import urlopen, HTTPError, URLError, HTTPRedirectHandler
 import requests, re
+import cookielib
 
 URLS = {
     "SEARCH": 'https://www.amazonlogistics.com/comp/packageSearch',
@@ -10,7 +11,8 @@ URLS = {
 }
 
 userSession = {
-    "session": None
+    "session": None,
+    "response": None
 }
 
 headers = {
@@ -76,7 +78,8 @@ def getAmazonSession(username, password):
     params['password'] = password
 
     s = session.post(URLS['SIGNIN'], data=params, headers=headers)
-    userSession['session'] = s
+    userSession['session'] = session
+    userSession['response'] = s
 
     return s
 
@@ -84,7 +87,7 @@ def getAmazonSession(username, password):
 #for correct and incorrect email/password
 def isAuthSession():
     try:
-        session = userSession['session']
+        session = userSession['response']
         if session == None:
             return False
     except:
@@ -98,3 +101,56 @@ def isAuthSession():
         return False
     else:
         return True
+
+#search amazon comp and return search tbas
+def getTbasFromComp(session, form):
+    response = session.post(amazonSearchUrl, data=form, headers=headers)
+    BSObj = BeautifulSoup(response.text, 'lxml')
+
+    tbaList = []
+    odd = BSObj.select('tr[class="odd"]')
+    even = BSObj.select('tr[class="even"]')
+
+
+
+    #find tba, link, route, and status
+    for item in odd:
+        tdList = item.select('td')
+
+        tba = item.find('a').text
+        link = item.find('a').get('href')
+        route = item.select('.routeCode')[0].text
+        status = item.select('.sm_status')[0].text
+        address = tdList[12].text
+
+        tbaInfo = {}
+        driver = {'firstName': "", 'lastName': ""}
+        tbaInfo['driver'] = driver
+        tbaInfo['tba'] = tba
+        tbaInfo['link'] = amazonBaseUrl + link
+        tbaInfo['route'] = route
+        tbaInfo['status'] = status
+        tbaInfo['address'] = address
+        tbaList.append(tbaInfo)
+
+
+    for item in even:
+        tdList = item.select('td')
+
+        tba = item.find('a').text
+        link = item.find('a').get('href')
+        route = item.select('.routeCode')[0].text
+        status = item.select('.sm_status')[0].text
+        address = tdList[12].text
+
+        tbaInfo = {}
+        driver = {'firstName': "", 'lastName': ""}
+        tbaInfo['driver'] = driver
+        tbaInfo['tba'] = tba
+        tbaInfo['link'] = amazonBaseUrl + link
+        tbaInfo['route'] = route
+        tbaInfo['status'] = status
+        tbaInfo['address'] = address
+        tbaList.append(tbaInfo)
+
+    return tbaList
