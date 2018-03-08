@@ -145,7 +145,7 @@ def getTbasFromComp(cookies, form):
         driver = {'firstName': "", 'lastName': ""}
         tbaInfo['driver'] = driver
         tbaInfo['tba'] = tba
-        tbaInfo['link'] = amazonBaseUrl + link
+        tbaInfo['link'] = URLS['BASE'] + link
         tbaInfo['route'] = route
         tbaInfo['status'] = status
         tbaInfo['address'] = address
