@@ -18,7 +18,7 @@ class Block(models.Model):
     date        = models.DateTimeField(max_length=20, blank=True, null=True)
     startTime   = models.CharField(max_length=10)
     endTime     = models.CharField(max_length=10)
-    shiftLength = models.CharField(max_length=10)
+    shiftLength = models.CharField(max_length=20)
     create_at   = models.DateTimeField(auto_now_add=True)
 
 
@@ -27,5 +27,5 @@ class Tba(models.Model):
     route       = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     tba         = models.CharField(max_length=15)
     status      = models.CharField(max_length=15)
-    link        = models.CharField(max_length=50)
-    address     = models.CharField(max_length=50, blank=True)
+    link        = models.CharField(max_length=60)
+    address     = models.CharField(max_length=30)
