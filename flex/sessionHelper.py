@@ -110,9 +110,6 @@ def getTbasFromComp(cookies, form):
     tbaList = []
     odd = BSObj.select('tr[class="odd"]')
     even = BSObj.select('tr[class="even"]')
-    print BSObj
-    print odd
-
 
     #find tba, link, route, and status
     for item in odd:
@@ -134,8 +131,6 @@ def getTbasFromComp(cookies, form):
         tbaInfo['status'] = status
         tbaInfo['address'] = address
         tbaList.append(tbaInfo)
-
-        print link
 
     for item in even:
         tdList = item.select('td')
