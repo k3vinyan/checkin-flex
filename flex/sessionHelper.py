@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from django.http import HttpResponse
 from urllib2 import urlopen, HTTPError, URLError, HTTPRedirectHandler
 import requests, re
-import cookielib
+import Cookie
 
 URLS = {
     "SEARCH": 'https://www.amazonlogistics.com/comp/packageSearch',
@@ -48,7 +48,7 @@ searchForm = {
     'downloadToken': "",
     'downloadToken': "",
     'ec_i':"ShipmentListTable",
-    'ShipmentListTable_crd':"5000",
+    'ShipmentListTable_crd':"2000",
     'ShipmentListTable_p':"1",
     'ShipmentListTable_s_merchantId':"",
     'ShipmentListTable_a_manifestTrackingId':"shipmentTrackingId",
@@ -77,9 +77,9 @@ def getAmazonSession(username, password):
     params['email'] = username
     params['password'] = password
 
-    s = session.post(URLS['SIGNIN'], data=params, headers=headers)
+    response = session.post(URLS['SIGNIN'], data=params, headers=headers)
     userSession['session'] = session
-    userSession['response'] = s
+    userSession['response'] = response
 
     return s
 
@@ -103,14 +103,15 @@ def isAuthSession():
         return True
 
 #search amazon comp and return search tbas
-def getTbasFromComp(session, form):
-    response = session.post(amazonSearchUrl, data=form, headers=headers)
+def getTbasFromComp(cookies, form):
+    #response = session.post(URLS['SEARCH'], data=form, headers=headers)
+    response = requests.post(URLS['SEARCH'], data=form, headers=headers, cookies=cookies)
     BSObj = BeautifulSoup(response.text, 'lxml')
-
     tbaList = []
     odd = BSObj.select('tr[class="odd"]')
     even = BSObj.select('tr[class="even"]')
-
+    print BSObj
+    print odd
 
 
     #find tba, link, route, and status
@@ -123,16 +124,18 @@ def getTbasFromComp(session, form):
         status = item.select('.sm_status')[0].text
         address = tdList[12].text
 
+
         tbaInfo = {}
         driver = {'firstName': "", 'lastName': ""}
         tbaInfo['driver'] = driver
         tbaInfo['tba'] = tba
-        tbaInfo['link'] = amazonBaseUrl + link
+        tbaInfo['link'] = link
         tbaInfo['route'] = route
         tbaInfo['status'] = status
         tbaInfo['address'] = address
         tbaList.append(tbaInfo)
 
+        print link
 
     for item in even:
         tdList = item.select('td')
