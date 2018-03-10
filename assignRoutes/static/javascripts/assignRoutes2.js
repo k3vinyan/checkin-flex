@@ -18,9 +18,9 @@ $(document).ready(function() {
      let route = element.target.value;
      let driverId = $(this).attr('name');
      let token =  $("input[type='hidden']")[0].value
+     console.log(route)
      let object = {'route': route, 'driverId': driverId, 'csrfmiddlewaretoken': token}
 
-     console.log("i going to challenge myself")
      $.ajax({
        type: "POST",
        url: "",
