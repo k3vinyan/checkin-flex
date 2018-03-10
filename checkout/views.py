@@ -81,13 +81,6 @@ def index(request):
         emergencyData      = getRouteToolsData(DSF3_EMERGENCY)
 
         drivers = Driver.objects.filter(checkin=True, isAssigned=True, checkout=False)
-        for driver in drivers:
-            print "-------------------------------------"
-            print driver.first_name
-            print driver.isAssigned
-            print driver.route.route
-
-            print "-------------------------------------"
         return render(request, 'checkout/index.html', {'drivers':drivers, 'samedayData':samedayData, 'emergencyData':emergencyData})
 
     #POST request
