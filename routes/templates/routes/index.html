@@ -1,121 +1,122 @@
 {% extends 'home/layout.html' %}
 
   {% block content %}
-
-<div class="overlay">
-  <div class="container loading loading-text">
-    <h1 class="loading-text">Adding Routes. Please Wait.....</h1>
-    <div class="progress">
-      <div class="indeterminate"></div>
+  {% load staticfiles %}
+    <link href="{% static 'css/routes.css' %}" rel="stylesheet" />
+  <div class="overlay">
+    <div class="container loading loading-text">
+      <h1 class="loading-text">Adding Routes. Please Wait.....</h1>
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="container center-align">
-  <div class="row ">
-    <h1>Routes</h1>
+  <div class="container center-align">
+    <div class="row ">
+      <h1>Routes</h1>
 
-    <!-- Modal Trigger -->
- <a class="waves-effect waves-light btn modal-trigger" href="#addRouteModal">Add Routes</a>
+      <!-- Modal Trigger -->
+   <a class="waves-effect waves-light btn modal-trigger" href="#addRouteModal">Add Routes</a>
 
- <!-- Modal Structure -->
- <div id="addRouteModal" class="addRouteModal modal">
-   <div class="modal-content">
-     <h3>ADD ROUTES:</h3>
-     <form action="" method="POST">
-       {% csrf_token %}
-       <textarea id="textarea" class="materialize-textarea" name="tbas"></textarea>
-         <div class="modal-footer">
-           <button class="btn waves-effect waves-light modal-action modal-close" type="submit" name="action">
-             Submit
-           </button>
-          </div>
-      </form>
+   <!-- Modal Structure -->
+   <div id="addRouteModal" class="addRouteModal modal">
+     <div class="modal-content">
+       <h3>ADD ROUTES:</h3>
+       <form action="" method="POST">
+         {% csrf_token %}
+         <textarea id="textarea" class="materialize-textarea" name="tbas"></textarea>
+           <div class="modal-footer">
+             <button class="btn waves-effect waves-light modal-action modal-close" type="submit" name="action">
+               Submit
+             </button>
+            </div>
+        </form>
+     </div>
    </div>
- </div>
 
 
 
-  <div class="col s12">
-    {% if routeDict %}
-      {% for cluster, keys in routeDict.items %}
-        <h2>Cluster: {{cluster }} | Routes: {{keys.count }}</h2>
-        <ul class="collapsible popout" data-collapsible="accordion">
-          {% for key, otherkeys in keys.routes.items %}
-            <li>
-              <div class="collapsible-header">
-                <table class="centered">
-                  <thead>
-                    <th>ROUTE</th>
-                    <th>Package Count</th>
-                    <th class="center-align">Options</th>
-                  </thead>
-                  <tr>
-                    <td>{{ key }}</td>
-                    <td>{{ otherkeys.count }}</td>
-                    <td>
-                      <a class="waves-effect waves-light btn modal-trigger" href="#{{key}}">Delete</a>
-                        <div id={{ key }} class="delete modal">
-                          <div class="modal-content">
-                            <h4>Are you sure you want to delete Route:</h4>
-                            <h3>{{ key }}</h3>
-                          </div>
-                          <div class="modal-footer">
-                            <form action="deleteRoute" method="POST">
-                              {% csrf_token %}
-                              <input type="hidden" name="route" value="{{ key }}">
-                              <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">Yes</button>
-                              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
-                            </form>
-                          </div>
-                        </div>
-                      </td>
-
-                  </tr>
-                </table>
-              </div>
-              <div class="collapsible-body">
-                <table class="striped">
-                  <thead>
-                    <th>TBA</th>
-                    <th>status</th>
-                    <th>Driver</th>
-                    <th>Link</th>
-                  </thead>
-                  {% for tba in otherkeys.tbas %}
+    <div class="col s12">
+      {% if routeDict %}
+        {% for cluster, keys in routeDict.items %}
+          <h2>Cluster: {{cluster }} | Routes: {{keys.count }}</h2>
+          <ul class="collapsible popout" data-collapsible="accordion">
+            {% for key, otherkeys in keys.routes.items %}
+              <li>
+                <div class="collapsible-header">
+                  <table class="centered">
+                    <thead>
+                      <th>ROUTE</th>
+                      <th>Package Count</th>
+                      <th class="center-align">Options</th>
+                    </thead>
                     <tr>
-                      <td>{{tba.tba}}</td>
-                      <td>{{tba.status}}</td>
-                      <td>{{tba.driver.first_name}} {{tba.driver.last_name}}</td>
-                      <td><a href={{ tba.link }}  target="_blank">More Info</a></td>
+                      <td>{{ key }}</td>
+                      <td>{{ otherkeys.count }}</td>
+                      <td>
+                        <a class="waves-effect waves-light btn modal-trigger" href="#{{key}}">Delete</a>
+                          <div id={{ key }} class="delete modal">
+                            <div class="modal-content">
+                              <h4>Are you sure you want to delete Route:</h4>
+                              <h3>{{ key }}</h3>
+                            </div>
+                            <div class="modal-footer">
+                              <form action="deleteRoute" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="route" value="{{ key }}">
+                                <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat">Yes</button>
+                                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+
                     </tr>
-                  {% endfor %}
-                </table>
-              </div>
+                  </table>
+                </div>
+                <div class="collapsible-body">
+                  <table class="striped">
+                    <thead>
+                      <th>TBA</th>
+                      <th>status</th>
+                      <th>Driver</th>
+                      <th>Link</th>
+                    </thead>
+                    {% for tba in otherkeys.tbas %}
+                      <tr>
+                        <td>{{tba.tba}}</td>
+                        <td>{{tba.status}}</td>
+                        <td>{{tba.driver.first_name}} {{tba.driver.last_name}}</td>
+                        <td><a href={{ tba.link }}  target="_blank">More Info</a></td>
+                      </tr>
+                    {% endfor %}
+                  </table>
+                </div>
 
 
-            </li>
-          {% endfor %}
-        </ul>
-      {% endfor %}
-    {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+     {% if message %}
+       <p>{{message.tbaCount}} of {{message.TbaTotal}} TBAs were sucessfully added</p>
+     {% endif %}
+     {% if message.routeCount  == 1 %}
+       <p>{{message.routeCount}} route was successfully added</p>
+      {% elif message.routeCount > 1 %}
+        <p>{{message.routeCount }} routes were sucessfully added</p>
+     {% endif %}
+     {% if message.existArrayLength > 0 %}
+       {% for item in message.existArray %}
+         <p>{{item}} already existed in database</p>
+       {% endfor %}
+     {% endif %}
+   </div>
   </div>
-
-   {% if message %}
-     <p>{{message.tbaCount}} of {{message.TbaTotal}} TBAs were sucessfully added</p>
-   {% endif %}
-   {% if message.routeCount == 0 %}
-     <p>{{message.routeCount}} route was successfully added</p>
-    {% elif message.routeCount > 1 %}
-      <p>{{message.routeCount }} routes were sucessfully added</p>
-   {% endif %}
-   {% if message.existArrayLength > 0 %}
-     {% for item in message.existArray %}
-       <p>{{item}} already existed in database</p>
-     {% endfor %}
-   {% endif %}
- </div>
-</div>
-{% load static %}
-<script type="text/javascript" src="{% static 'javascripts/routes.js' %}"></script>
+  {% load static %}
+    <script type="text/javascript" src="{% static 'javascripts/routes.js' %}"></script>
 {% endblock %}
