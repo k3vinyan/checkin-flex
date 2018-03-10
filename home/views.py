@@ -90,10 +90,9 @@ def index(request):
         response = redirect('/')
 
         for cookie in s.cookies:
-            print cookie
             response.set_cookie(cookie.name, cookie.value, domain='dsf3-flex.herokuapp.com')
 
 
         return response
-        else:
-            return render(request, 'home/login.html', {'error': 'email or password is incorrect'})
+    else:
+        return render(request, 'home/login.html', {'error': 'email or password is incorrect'})
