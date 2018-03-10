@@ -91,9 +91,9 @@ def index(request):
 
         for cookie in s.cookies:
             print cookie
-            response.set_cookie(cookie.name, cookie.value, domain='.herokuapp.com')
+            response.set_cookie(cookie.name, cookie.value, domain='dsf3-flex.herokuapp.com')
 
-        if sessionHelper.isAuthSession():
-            return response
+
+        return response
         else:
             return render(request, 'home/login.html', {'error': 'email or password is incorrect'})
