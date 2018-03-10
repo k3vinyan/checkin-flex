@@ -3,4 +3,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'noShow', views.noShow, name='noShow'),
+    url(r'isCheckin', views.isCheckin, name='isCheckin'),
 ]
