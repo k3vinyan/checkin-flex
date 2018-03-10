@@ -91,7 +91,7 @@ def index(request):
 
         for cookie in s.cookies:
             print cookie
-            response.set_cookie(cookie.name, cookie.value)
+            response.set_cookie(cookie.name, cookie.value, cookie.domain='.herokuapp.com')
 
         if sessionHelper.isAuthSession():
             return response
