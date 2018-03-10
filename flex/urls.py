@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'^drivers/', include('drivers.urls', namespace='drivers')),
     url(r'^checkin/', include('checkin.urls', namespace='checkin')),
     url(r'^assignRoutes/', include('assignRoutes.urls', namespace='assignRoutes')),
-    url(r'^checkout/', include('routes.urls', namespace='checkout')),
+    url(r'^checkout/', include('checkout.urls', namespace='checkout')),
     url(r'^$', include('home.urls', namespace='home')),
 ]
