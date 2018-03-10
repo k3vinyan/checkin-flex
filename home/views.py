@@ -8,6 +8,7 @@ from flex import sessionHelper
 # Create your views here.
 def index(request):
 
+    #need session prior to homepage
     if request.method == 'GET':
         if sessionHelper.isAuthSession():
             return render(request, 'home/index.html')
@@ -19,9 +20,13 @@ def index(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         s = sessionHelper.getAmazonSession(email, password)
+        response = render(request, 'home/index.html')
 
-        #something is wrong
+        for cookie in s.cookies:
+            print cookie
+            response.set_cookie(cookie.name, cookie.value)
+
         if sessionHelper.isAuthSession():
-            return redirect('/')
+            return response
         else:
-            return render(request, 'home/index.html', {'error': 'email or password is incorrect'})
+            return render(request, 'home/login.html', {'error': 'email or password is incorrect'})
