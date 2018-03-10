@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from urllib2 import urlopen, HTTPError, URLError, HTTPRedirectHandler
 import requests, re
 import Cookie
+from collections import OrderedDict
 
 URLS = {
     "SEARCH": 'https://www.amazonlogistics.com/comp/packageSearch',
@@ -102,6 +103,62 @@ def isAuthSession():
     else:
         return True
 
+def getRoutingToolsData(cluster):
+
+    #Avaiable Cluster
+    DSF3_EMERGENCY  = "#graph-DSF3_EMERGENCY"
+    RTS_DSF3_LATE   = "#graph-RTS-DSF3-LATE"
+    SAME_EVEN       = "#graph-DSF3-SAME-EVEN"
+
+    #tuple of package status
+    packageStatus = ('betweenFCandStation', 'atStation', 'readyForDeparture', 'onRoadWithDA', 'delivered', 'attempted', 'undelivered', 'others')
+
+    s = requests.get("http://localhost:8000/checkout/routingTools", headers=headers)
+    #create session and create soup object
+    BSObj = BeautifulSoup(s.text, 'lxml')
+
+    #
+    #get all routes for cluster and return dictionary of routes
+    def getRoutes(cluster):
+        #routes = BSObj.select(cluster)[0].find_all("text", attrs={"style":"text-anchor: end;", "x":"-9", "y":"0"})
+        routes = BSObj.select(cluster)[0].find_all("text", attrs={"dy":".32em", "style":"text-anchor: end;"})
+        routesDict = OrderedDict()
+        for route in routes:
+            routesDict[route.text] = {}
+        return routesDict
+
+    #get the values from the status of each route; return array of tuples
+    def getValueOfStatus(cluster):
+        data = []
+        sort = []
+
+        values = BSObj.select(cluster)[0].find_all("text", attrs={"dy":".40em", "text-anchor":"middle", "font-size":"12px"})
+        count = 0
+        for value in values:
+            count += 1
+            sort.append(value.text)
+            if count == 8:
+                count = 0
+                data.append(tuple(sort))
+                sort = []
+        return data
+
+    def createClusterData(getValueOfStatus, getRoutes, packageStatus):
+        newObject = {}
+        for data, route in zip(getValueOfStatus, getRoutes):
+            newObject[route] ={}
+            for value, status in zip(data, packageStatus):
+                newObject[route][status] = value
+        return newObject
+
+    #use multiple methods to create object of allroutes data from routingTools
+    def getRouteToolsData(cluster):
+        valueOfStatus = getValueOfStatus(cluster)
+        routes = getRoutes(cluster)
+
+        clusterData = createClusterData(valueOfStatus, routes, packageStatus)
+        return clusterData
+
 #search amazon comp and return search tbas
 def getTbasFromComp(cookies, form):
     #response = session.post(URLS['SEARCH'], data=form, headers=headers)
@@ -126,7 +183,7 @@ def getTbasFromComp(cookies, form):
         driver = {'firstName': "", 'lastName': ""}
         tbaInfo['driver'] = driver
         tbaInfo['tba'] = tba
-        tbaInfo['link'] = link
+        tbaInfo['link'] = URLS['BASE'] + link
         tbaInfo['route'] = route
         tbaInfo['status'] = status
         tbaInfo['address'] = address
