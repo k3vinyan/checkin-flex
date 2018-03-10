@@ -31,11 +31,6 @@ def index(request):
             date = date.astimezone(timezone('US/Pacific'))
             todayHour = date.strftime('%H')
 
-            print "------------------------------------------"
-            print date
-            print todayHour
-            print "------------------------------------------"
-
             for route in routes:
                 if route['isAssigned'] == False:
                     unassignRoutes.append(route)
