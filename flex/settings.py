@@ -79,16 +79,18 @@ WSGI_APPLICATION = 'flex.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME'),
-        'USER': os.getenv('USERNAME'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+DATABASES = {'default': dj_database_url.config(default='postgres://dnsynphneiivfa:4782144cf2f4b6233161d9ab8cdc6d5b0accbd4e117548d202112908a1a7bece@ec2-50-17-206-214.compute-1.amazonaws.com:5432/d5430d8ak9eqv')}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('DATABASE_NAME'),
+#         'USER': os.getenv('USERNAME'),
+#         'PASSWORD': os.getenv('PASSWORD'),
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 
 # Password validation
