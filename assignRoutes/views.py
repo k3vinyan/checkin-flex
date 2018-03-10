@@ -44,6 +44,9 @@ def index(request):
         #if route is None sit driver route to None
         if route == "None":
             driver.route = None
+            driver.isAssigned = False
+            driver.save(update_fields=['route'])
+            driver.save(update_fields=['isAssigned'])
         else:
             driver.route = route
             r = Route.objects.get(id=route.id)
@@ -57,9 +60,9 @@ def index(request):
             for tba in tbas:
                 tba.driver = driver
                 tba.save(update_fields=['driver'])
-        driver.isAssigned = True
-        driver.save(update_fields=['route'])
-        driver.save(update_fields=['isAssigned'])
+            driver.isAssigned = True
+            driver.save(update_fields=['route'])
+            driver.save(update_fields=['isAssigned'])
 
 
 
