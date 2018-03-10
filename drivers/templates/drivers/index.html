@@ -1,13 +1,7 @@
 {% extends 'home/layout.html' %}
 
 {% block content %}
-  <h1>ADD DRIVERS</h1>
-  <form action="/users/operations/add_drivers" method="POST" id="add-driver-form">
-    {% csrf_token %}
-    <textarea name='drivers'>
-    </textarea>
-    <input type="submit" />
-  </form>
+  <h1>DPS</h1>
 
 {% if blocks %}
   {% for block in blocks %}
