@@ -2,7 +2,7 @@
 
   {% block content %}
   <div class="contaner">
-    <form action="checkin" method="GET">
+    <form action="" method="GET">
       {% csrf_token %}
         <input type="hidden" name="">
         <input type="text" name="time" class="timepicker">
@@ -59,6 +59,6 @@
     </table>
   </div>
   {% load static %}
-  <script type="text/javascript" src="{% static 'javascripts/roster.js' %}"></script>
-  <script type="text/javascript" src="{% static 'javascripts/checkin.js' %}"></script>
+
+  <script type="text/javascript" src="{% static 'javascripts/checkin1.js' %}"></script>
   {% endblock %}
