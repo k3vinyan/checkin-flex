@@ -23,7 +23,13 @@
               <td>{{ driver.route.route }}</td>
               <td class="center-align">{{ driver.packageScan }} / {{ driver.route.tbaCount }}</td>
               <td>
-                todo
+                {% with samedayData|get_item:driver.route.route  as data %}
+                  {% for key, value in data.items %}
+                    {% if value != "" %}
+                      {{key}} : {{value}}
+                    {% endif %}
+                  {% endfor %}
+                {% endwith %}
               </td>
               <td>
                 <form action="getDPScan">
@@ -50,5 +56,5 @@
   </div>
 
   {% load static %}
-  <script type="text/javascript" src="{% static 'javascript/checkout.js' %}"></script>
+  <script type="text/javascript" src="{% static 'javascripts/checkout2.js' %}"></script>
   {% endblock %}
