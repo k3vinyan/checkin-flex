@@ -4,16 +4,30 @@ from urllib2 import urlopen, HTTPError, URLError, HTTPRedirectHandler
 import requests, re
 import Cookie
 from collections import OrderedDict
+import datetime
+import os
+from dotenv import load_dotenv
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 
 URLS = {
     "SEARCH": 'https://www.amazonlogistics.com/comp/packageSearch',
     "SIGNIN": "https://www.amazonlogistics.com/ap/signin",
-    "BASE": "https://www.amazonlogistics.com/"
+    "BASE": "https://www.amazonlogistics.com/",
+    "ROSTER": "https://logistics.amazon.com/internal/capacity/rosterview?serviceAreaId=11&date="
+}
+
+#2017-07-28
+user = {
+    "EMAIL": os.getenv('EMAIL'),
+    "PASSWORDFOREMAIL": os.getenv('PASSWORDFOREMAIL'),
+    "session": "",
+    "response": ""
 }
 
 userSession = {
-    "session": None,
-    "response": None
+    "session": ""
 }
 
 headers = {
@@ -61,6 +75,9 @@ searchForm = {
     'action':"ajaxSearch"
 }
 
+def getRosterUrl():
+    return URLS["ROSTER"] + str(datetime.date.today())
+
 #get session from comp
 def getAmazonSession(username, password):
     session = requests.Session()
@@ -79,29 +96,9 @@ def getAmazonSession(username, password):
     params['password'] = password
 
     response = session.post(URLS['SIGNIN'], data=params, headers=headers)
-    userSession['session'] = session
-    userSession['response'] = response
-
+    user['session'] = session
+    user['response'] = response
     return s
-
-#check if response return correct page since 200 status code still returnn
-#for correct and incorrect email/password
-def isAuthSession():
-    try:
-        session = userSession['response']
-        if session == None:
-            return False
-    except:
-        return False
-
-    BSObj = BeautifulSoup(session.text, 'lxml')
-    createAccountSubmitId = BSObj.find(id="createAccountSubmit")
-
-    #return false if incorrect html response
-    if createAccountSubmitId:
-        return False
-    else:
-        return True
 
 def getRoutingToolsData(cluster):
 
