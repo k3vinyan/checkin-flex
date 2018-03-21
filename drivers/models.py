@@ -19,3 +19,6 @@ class Driver(models.Model):
     routingTool = models.CharField(max_length=3, blank=True)
     route       = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     block       = models.ForeignKey(Block, null=True)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name
