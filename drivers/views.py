@@ -17,7 +17,11 @@ def index(request):
 
             #this is a test roster, todo
             session = requests.Session()
-            s = session.get("http://localhost:8000/drivers/roster", headers=sessionHelper.headers)
+
+            #test roster
+            #s = session.get("http://localhost:8000/drivers/roster", headers=sessionHelper.headers)
+            rosterUrl = sessionHelper.getRosterUrl()
+            s = session.get(rosterUrl, headers=sessionHelper.headers)
             BSObj = BeautifulSoup(s.text, 'lxml')
             daIDs   = BSObj.find(id="cspDATable").find_all(attrs={'data-bind': 'text: transporterId'})
             daNames = BSObj.find(id="cspDATable").find_all(attrs={'data-bind': 'text: DAName'})

@@ -7,14 +7,6 @@ from routes.models import Tba, Route
 from flex import sessionHelper
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
-# def index(request):
-#
-#     if request.method == 'GET':
-#         if sessionHelper.isAuthSession():
-#             return render(request, 'routes/index.html')
-#         else:
-#             return redirect('../')
-
 def index(request):
     #get request
     routeDict = {}
@@ -58,7 +50,7 @@ def index(request):
         tbaCount = 0
         routeCount = 0
         tbaTotal = 0
-
+        print data
         existArray = []
         noRouteArray = []
         for item in data:

@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^assignRoutes/', include('assignRoutes.urls', namespace='assignRoutes')),
     url(r'^checkout/', include('checkout.urls', namespace='checkout')),
     url(r'^$', include('home.urls', namespace='home')),
+    url(r'^login/', include('home.urls', namespace='login')),
+    url(r'^logout/', include('home.urls', namespace='logout')),
 ]

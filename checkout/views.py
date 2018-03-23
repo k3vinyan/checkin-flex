@@ -11,25 +11,78 @@ from collections import OrderedDict
 from drivers.models import Driver
 # Create your views here.
 def index(request):
-    # if request.method == 'GET':
-    #     if sessionHelper.isAuthSession():
-    #         return render(request, 'checkout/index.html')
-    #     else:
-    #         return redirect('/')
-
-    #Cluster
-    DSF3_EMERGENCY  = "#graph-DSF3_EMERGENCY"
-    RTS_DSF3_LATE   = "#graph-RTS-DSF3-LATE"
-    SAME_EVEN       = "#graph-DSF3-SAME-EVEN"
-
-    #tuple of package status
-    packageStatus = ('betweenFCandStation', 'atStation', 'readyForDeparture', 'onRoadWithDA', 'delivered', 'attempted', 'undelivered', 'others')
-
-    #create session and create soup object
     session = requests.Session()
     s = session.get("http://localhost:8000/checkout/routingTools", headers=sessionHelper.headers)
     BSObj = BeautifulSoup(s.text, 'lxml')
 
+    mainTable = BSObj.select("#mainTable")
+    tr = mainTable[0].find_all("tr")
+
+    count = 0
+    driverData = {
+        'company': "",
+        'route': "",
+        'driver': "",
+        'serviceType': "",
+        'cubicSize': "",
+        'departureTime': "",
+        'returnTime': "",
+        'vehicleStop': "",
+        'packagePerStop': "",
+        'totalPackage': "",
+        'actualPackage': "",
+        'expectedPackage': ""
+    }
+    drivers = []
+
+    count = 0;
+    for t in tr:
+        test = t.select("td")
+        print "----------------------------"
+        print count
+        for item in test:
+            if count == 0:
+                driverData['company'] = item.text
+                count += 1
+            if count == 1:
+                driverData['route'] = item.text
+                count += 1
+            if count == 2:
+                driverData['driver'] = item.text
+                count += 1
+            if count == 3:
+                driverData['serviceType'] = item.text
+                count += 1
+            if count == 4:
+                driverData['cubicSize'] = item.text
+                count += 1
+            if count == 5:
+                driverData['departureTime'] = item.text
+                count += 1
+            if count == 6:
+                driverData['returnTime'] = item.text
+                count += 1
+            if count == 7:
+                driverData['vehicleStop'] = item.text
+                count += 1
+            if count == 8:
+                driverData['packagePerStop'] = item.text
+                count += 1
+            if count == 9:
+                driverData['totalPackage'] = item.text
+                count += 1
+            if count == 10:
+                driverData['actualPackage'] = item.text
+                count += 1
+            if count > 10 and count < 16:
+                count += 1
+            if count == 16:
+                drivers.append(driverData)
+                count = 0
+            print driverData
+        print "----------------------------"
+
+    print drivers
     #get all routes for cluster and return dictionary of routes
     def getRoutes(cluster):
         #routes = BSObj.select(cluster)[0].find_all("text", attrs={"style":"text-anchor: end;", "x":"-9", "y":"0"})
@@ -40,36 +93,36 @@ def index(request):
         return routesDict
 
     #get the values from the status of each route; return array of tuples
-    def getValueOfStatus(cluster):
-        data = []
-        sort = []
-
-        values = BSObj.select(cluster)[0].find_all("text", attrs={"dy":".40em", "text-anchor":"middle", "font-size":"12px"})
-        count = 0
-        for value in values:
-            count += 1
-            sort.append(value.text)
-            if count == 8:
-                count = 0
-                data.append(tuple(sort))
-                sort = []
-        return data
-
-    def createClusterData(getValueOfStatus, getRoutes, packageStatus):
-        newObject = {}
-        for data, route in zip(getValueOfStatus, getRoutes):
-            newObject[route] ={}
-            for value, status in zip(data, packageStatus):
-                newObject[route][status] = value
-        return newObject
-
-    #use multiple methods to create object of allroutes data from routingTools
-    def getRouteToolsData(cluster):
-        valueOfStatus = getValueOfStatus(cluster)
-        routes = getRoutes(cluster)
-
-        clusterData = createClusterData(valueOfStatus, routes, packageStatus)
-        return clusterData
+    # def getValueOfStatus(cluster):
+    #     data = []
+    #     sort = []
+    #
+    #     values = BSObj.select(cluster)[0].find_all("text", attrs={"dy":".40em", "text-anchor":"middle", "font-size":"12px"})
+    #     count = 0
+    #     for value in values:
+    #         count += 1
+    #         sort.append(value.text)
+    #         if count == 8:
+    #             count = 0
+    #             data.append(tuple(sort))
+    #             sort = []
+    #     return data
+    #
+    # def createClusterData(getValueOfStatus, getRoutes, packageStatus):
+    #     newObject = {}
+    #     for data, route in zip(getValueOfStatus, getRoutes):
+    #         newObject[route] ={}
+    #         for value, status in zip(data, packageStatus):
+    #             newObject[route][status] = value
+    #     return newObject
+    #
+    # #use multiple methods to create object of allroutes data from routingTools
+    # def getRouteToolsData(cluster):
+    #     valueOfStatus = getValueOfStatus(cluster)
+    #     routes = getRoutes(cluster)
+    #
+    #     clusterData = createClusterData(valueOfStatus, routes, packageStatus)
+    #     return clusterData
 
     @register.filter
     def get_item(dictionary, key):
@@ -77,11 +130,12 @@ def index(request):
 
     if request.method =='GET':
 
-        samedayData        = getRouteToolsData(SAME_EVEN)
-        emergencyData      = getRouteToolsData(DSF3_EMERGENCY)
-
-        drivers = Driver.objects.filter(checkin=True, isAssigned=True, checkout=False)
-        return render(request, 'checkout/index.html', {'drivers':drivers, 'samedayData':samedayData, 'emergencyData':emergencyData})
+        # samedayData        = getRouteToolsData(SAME_EVEN)
+        # emergencyData      = getRouteToolsData(DSF3_EMERGENCY)
+        #
+        # drivers = Driver.objects.filter(checkin=True, isAssigned=True, checkout=False)
+        # return render(request, 'checkout/index.html', {'drivers':drivers, 'samedayData':samedayData, 'emergencyData':emergencyData})
+        return render(request, 'checkout/index.html')
 
     #POST request
     if request.method == 'POST':
