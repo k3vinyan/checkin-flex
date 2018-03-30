@@ -2,9 +2,12 @@
 
 {% block content %}
   <h1>DPS</h1>
-
+  <div class="test">
+    {{crr}}
+  </div>
 {% if blocks %}
   {% for block in blocks %}
+
   <div class="col s6">
     <ul class="collapsible popout" data-collapsible="accordion">
       <li>
@@ -53,5 +56,7 @@
   {% endfor %}
 {% endif %}
   {% load static %}
+  <script type="text/javascript" src="{% static 'javascripts/cookie.js' %}"></script>
   <script type="text/javascript" src="{% static 'javascripts/drivers.js' %}"></script>
+  <script type="text/javascript" src="{% static 'javascripts/roster1.js' %}"></script>
 {% endblock %}

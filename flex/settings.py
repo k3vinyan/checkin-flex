@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'flex.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {'default': dj_database_url.config(default='postgres://dnsynphneiivfa:4782144cf2f4b6233161d9ab8cdc6d5b0accbd4e117548d202112908a1a7bece@ec2-50-17-206-214.compute-1.amazonaws.com:5432/d5430d8ak9eqv')}
+DATABASES = {'default': dj_database_url.config(default='postgres://wzqqbppvlsavfw:c34eace025cb08aae686d260ef6fc1cc0ab2ed1d7044269c5f368cddcf252a08@ec2-107-20-151-189.compute-1.amazonaws.com:5432/d6ungmc5qoem74')}
 
 # DATABASES = {
 #     'default': {
