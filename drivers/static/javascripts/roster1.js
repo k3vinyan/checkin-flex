@@ -37,11 +37,14 @@ $(document).ready(function(){
     //https://logistics.amazon.com/internal/capacity/rosterview?serviceAreaId=11&date=2018-03-27
     let date = new Date()
     let todayDate = date.getFullYear() + "-" + date.getDate() + "-" + date.getDay()
-    baseRosterUrl = "https://logistics.amazon.com/internal/capacity/rosterview?serviceAreaId=11&date=" + todayDate
+    let baseRosterUrl = "https://logistics.amazon.com/internal/capacity/rosterview?serviceAreaId=11&date=" + todayDate
+    let baseUrl = "https://dsf3-flex.herokuapp.com/drivers/";
+    let localUrl = "http://localhost:8000/drivers/roster";
+    let driverUrl = "http://localhost:8000/drivers/";
 
     $.ajax({
       type: "GET",
-      url: "http://localhost:8000/drivers/roster",
+      url: baseRosterUrl,
       success: function(response){
           driversArray = []
           let node = toNode(response)
@@ -65,7 +68,7 @@ $(document).ready(function(){
               data: driversArray,
                csrfmiddlewaretoken: csrftoken
             },
-            url: "http://localhost:8000/drivers/",
+            url: baseUrl,
             success: function(response){
               console.log(response)
             },
