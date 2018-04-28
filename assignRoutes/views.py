@@ -11,13 +11,12 @@ def index(request):
     routes = Route.objects.filter(isAssigned=False)
     DP = {'drivers': drivers, 'routes': routes }
     if request.method == "GET":
-        if sessionHelper.isAuthSession():
-            drivers = Driver.objects.filter(checkin=True, checkout=False)
-            routes = Route.objects.filter(isAssigned=False)
-            DP = {'drivers': drivers, 'routes': routes }
-            return render(request, 'assignRoutes/index.html', {'DP': DP})
-        else:
-            return redirect('../')
+
+        drivers = Driver.objects.filter(checkin=True, checkout=False)
+        routes = Route.objects.filter(isAssigned=False)
+        DP = {'drivers': drivers, 'routes': routes }
+        return render(request, 'assignRoutes/index.html', {'DP': DP})
+        #return redirect('../')
     if request.method == "POST":
 
         route = request.POST.get('route')

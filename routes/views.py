@@ -11,33 +11,33 @@ def index(request):
     #get request
     routeDict = {}
     if request.method == 'GET':
-        if sessionHelper.isAuthSession():
-            allTbas = Tba.objects.all()
-            allRoutes = Route.objects.all()
 
-            for tba in allTbas:
-                cluster = tba.route.cluster
-                route = tba.route.route
-                if routeDict.get(cluster) == None:
-                    routeDict[cluster] = {'count': 0, 'routes': {} }
-                if routeDict[cluster]['routes'].get(route) == None:
-                    routeDict[cluster]['routes'][route] = {'count': 0, 'tbas': []}
-                    routeDict[cluster]['count'] += 1
-                routeDict[cluster]['routes'][route]['tbas'].append(tba)
-                routeDict[cluster]['routes'][route]['count'] += 1
+        allTbas = Tba.objects.all()
+        allRoutes = Route.objects.all()
+
+        for tba in allTbas:
+            cluster = tba.route.cluster
+            route = tba.route.route
+            if routeDict.get(cluster) == None:
+                routeDict[cluster] = {'count': 0, 'routes': {} }
+            if routeDict[cluster]['routes'].get(route) == None:
+                routeDict[cluster]['routes'][route] = {'count': 0, 'tbas': []}
+                routeDict[cluster]['count'] += 1
+            routeDict[cluster]['routes'][route]['tbas'].append(tba)
+            routeDict[cluster]['routes'][route]['count'] += 1
 
 
 
-            for cluster in routeDict:
-                routes = routeDict[cluster]['routes']
-                for route in routes:
-                    count = routes[route]['count']
-                    r = Route.objects.get(route=route)
-                    r.tbaCount = count
-                    r.save(update_fields=['tbaCount'])
-            return render(request, 'routes/index.html', {'routeDict': routeDict })
-        else:
-            return redirect('../')
+        for cluster in routeDict:
+            routes = routeDict[cluster]['routes']
+            for route in routes:
+                count = routes[route]['count']
+                r = Route.objects.get(route=route)
+                r.tbaCount = count
+                r.save(update_fields=['tbaCount'])
+        return render(request, 'routes/index.html', {'routeDict': routeDict })
+    else:
+        return redirect('../')
     #post requeest
     if request.method == 'POST':
         cj = request.COOKIES
