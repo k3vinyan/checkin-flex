@@ -9,7 +9,7 @@ dotenv==0.0.5
 html5lib==0.999
 ipaddress==1.0.16
 linecache2==1.0.0
-lxml==3.5.0
+lxml==4.6.3
 python-dotenv==0.8.0
 requests==2.9.1
 six==1.10.0
